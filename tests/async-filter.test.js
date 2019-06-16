@@ -2,18 +2,16 @@ import GokuArray from '../src/index';
 import { CLIENT_RENEG_LIMIT } from 'tls';
 
 function timeout(ms) {
-  return new Promise(resolve => setTimeout(resolve(ms), ms));
+  return new Promise(resolve => setTimeout(resolve(ms), ms * 1000))
 }
 
 const simpleArray = [1, 2, 3]
 
-test('It should return pending using the built-in filter function', async () => {
-  const arr = await simpleArray.filter(async item => {
+test('It should return original array using the built-in filter function because filtering condition is not considered', async () => {
+  const arr = await simpleArray.filter(async (item) => {
     const obj = await timeout(item)
-    console.log(obj, item)
-    return obj === item
+    return obj === 1 // this should match only first item, but it does not. Condition is ignored
   })
-  console.log(arr)
   expect(arr).toHaveLength(simpleArray.length)
 });
 

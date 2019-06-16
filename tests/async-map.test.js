@@ -1,14 +1,16 @@
 import GokuArray from '../src/index';
-import { CLIENT_RENEG_LIMIT } from 'tls';
 
 function timeout(ms) {
-  return new Promise(resolve => setTimeout(resolve(true), ms));
+  return new Promise(resolve => setTimeout(resolve(true), ms * 1000));
 }
 
 const simpleArray = [1, 2, 3]
 
 test('It should return pending using the built-in map function', async () => {
-  const arr = await simpleArray.map(item => timeout(item))
+  const arr = await simpleArray.map(async item => {
+    const promise = await timeout(item)
+    return promise
+  })
   expect(arr.filter(obj  => Promise.resolve(obj) == obj)).toHaveLength(simpleArray.length)
 });
 

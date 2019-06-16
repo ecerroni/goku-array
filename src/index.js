@@ -3,12 +3,12 @@ class GokuArray extends Array {
   constructor(items) {
     super(...items);
 
-      /** Async version of Array.prototype.reduce()
-   *  await reduce(['/foo', '/bar', '/baz'], async (acc, v) => {
-   *    acc[v] = await (await fetch(v)).json();
-   *    return acc;
-   *  }, {});
-   */
+    /** Async version of Array.prototype.reduce()
+     *  await reduce(['/foo', '/bar', '/baz'], async (acc, v) => {
+     *    acc[v] = await (await fetch(v)).json();
+     *    return acc;
+     *  }, {});
+     */
     this._reduce = async (arr, fn, val, pure) => {
       for (let i = 0; i < arr.length; i++) {
         const v = await fn(val, arr[i], i, arr);
@@ -23,18 +23,10 @@ class GokuArray extends Array {
     return Array;
   }
 
-  asyncReduce = (fn) =>
-    this._reduce(
-      this,
-      fn,
-      [],
-      false
-    );
-
   /** Async version of Array.prototype.map()
    *  await map(['foo', 'baz'], async v => await fetch(v) )
    */
-  asyncMap = (fn) =>
+  asyncMap = fn =>
     this._reduce(
       this,
       async (acc, value, index, arr) => {
@@ -44,18 +36,18 @@ class GokuArray extends Array {
       false
     );
 
-   /** Async version of Array.prototype.filter()
+  /** Async version of Array.prototype.filter()
    *  await filter(['foo', 'baz'], async v => (await fetch(v)).ok )
    */
-  asyncFilter = async (fn) =>
+  asyncFilter = async fn =>
     this._reduce(
       this,
       async (acc, value, index, arr) => {
         if (await fn(value, index, arr)) acc.push(value);
       },
       [],
-      false,
-    )
+      false
+    );
 
   unique = identity => {
     return typeof identity === "function"
@@ -68,6 +60,58 @@ class GokuArray extends Array {
         }, new Set())
       : [...new Set(this)];
   };
+
+  sortItems = ({ ordering = 'ASC', field = null } = {}) =>
+  this.sort((a, b) => {
+    if (!field) {
+      if (typeof a === 'number') {
+        if (ordering === 'ASC') {
+          return a - b;
+        }
+        return b - a;
+      }
+      if (typeof a === 'string') {
+        if (a < b) {
+          const value = ordering === 'ASC' ? -1 : 1;
+          return value;
+        }
+        if (a > b) {
+          const value = ordering === 'ASC' ? 1 : -1;
+          return value;
+        }
+        // names must be equal
+        return 0;
+      }
+      // TODO: sort also date objects
+      // use Object.prototype.toString.call(field) === '[object Date]'
+      // return field.getTime() - field.getTime()
+    } else if (typeof a === 'object') {
+      if (typeof a[field] === 'number') {
+        if (ordering === 'ASC') {
+          return a[field] - b[field];
+        }
+        return b[field] - a[field];
+      }
+      if (typeof a[field] === 'string') {
+        const nameA = a[field].toUpperCase();
+        const nameB = b[field].toUpperCase();
+        if (nameA < nameB) {
+          const value = ordering === 'ASC' ? -1 : 1;
+          return value;
+        }
+        if (nameA > nameB) {
+          const value = ordering === 'ASC' ? 1 : -1;
+          return value;
+        }
+        // names must be equal
+        return 0;
+      }
+      // TODO: sort also date objects
+      // use Object.prototype.toString.call(field) === '[object Date]'
+      // return field.getTime() - field.getTime()
+    }
+    return 0; // do nothing;
+  });
 }
 
 export default GokuArray;
