@@ -1,5 +1,4 @@
 import GokuArray from '../src/index';
-import { CLIENT_RENEG_LIMIT } from 'tls';
 
 function timeout(ms) {
   return new Promise(resolve => setTimeout(resolve(ms), ms * 1000))

@@ -1,6 +1,6 @@
 module.exports = {
   presets: [
-    ["@babel/env"],
+    ["latest-node", { "target": "10" }],
     ["minify", {
       "keepFnName": true
     }]

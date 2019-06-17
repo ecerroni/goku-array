@@ -1,5 +1,5 @@
-import GokuArray from '../src/index';
 
+import GokuArray from '../src/index';
 function timeout(ms) {
   return new Promise(resolve => setTimeout(resolve(true), ms * 1000));
 }
