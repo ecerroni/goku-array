@@ -20,6 +20,6 @@ test('It should await for the promises to resolve', async () => {
     const obj = await timeout(item)
     return obj === item
   })
-  expect(newArr.filter(obj  => Promise.resolve(obj) == obj)).toHaveLength(0)
-  expect(newArr.filter(item  => typeof item === 'number')).toHaveLength(simpleArray.length)
+  expect(newArr.filter(obj => Promise.resolve(obj) == obj)).toHaveLength(0)
+  expect(newArr.filter(item => typeof item === 'number')).toHaveLength(simpleArray.length)
 });

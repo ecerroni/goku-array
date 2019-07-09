@@ -11,12 +11,13 @@ test('It should return pending using the built-in map function', async () => {
     const promise = await timeout(item)
     return promise
   })
-  expect(arr.filter(obj  => Promise.resolve(obj) == obj)).toHaveLength(simpleArray.length)
+  expect(arr.filter(obj => Promise.resolve(obj) == obj)).toHaveLength(simpleArray.length)
 });
 
 test('It should await for the promises to resolve', async () => {
   const arr = new GokuArray(simpleArray)
   const newArr = await arr.asyncMap(item => timeout(item))
-  expect(newArr.filter(obj  => Promise.resolve(obj) == obj)).toHaveLength(0)
-  expect(newArr.filter(item  => item === true)).toHaveLength(simpleArray.length)
+  expect([...newArr]).toEqual([true, true, true])
+  expect(newArr.filter(obj => Promise.resolve(obj) == obj)).toHaveLength(0)
+  expect(newArr.filter(item => item === true)).toHaveLength(simpleArray.length)
 });

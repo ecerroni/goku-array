@@ -1,6 +1,14 @@
 class GokuArray extends Array {
-  constructor(items) {
-    super(...items);
+  constructor(items, preserveNativeMethods) {
+    if (items && items.length === 1 && typeof items[0] === 'number') { // avoiding new Array(x) that creates an array with a length of x
+      super()
+      this.push(items[0])
+    } else if (items && Array.isArray(items)) {
+      super(...items);
+    } else {
+      super()
+    }
+    GokuArray.preserveNativeMethods = preserveNativeMethods
     /** Async version of Array.prototype.reduce()
      *  await reduce(['/foo', '/bar', '/baz'], async (acc, v) => {
      *    acc[v] = await (await fetch(v)).json();
@@ -17,10 +25,14 @@ class GokuArray extends Array {
     return val;
   };
 
-  // built-in methods will use this as the constructor
+
+  // built-in methods will use this as the constructor if preserveNativeMethods flag is present
   static get [Symbol.species]() {
-    return Array;
+    if (this.preserveNativeMethods) return Array;
+    return this
   }
+
+  toArray = () => [...this]
 
   /** Async version of Array.prototype.map()
    *  await map(['foo', 'baz'], async v => await fetch(v) )
@@ -31,7 +43,7 @@ class GokuArray extends Array {
       async (acc, value, index, arr) => {
         acc.push(await fn(value, index, arr));
       },
-      [],
+      new GokuArray(),
       false
     );
 
@@ -44,7 +56,7 @@ class GokuArray extends Array {
       async (acc, value, index, arr) => {
         if (await fn(value, index, arr)) acc.push(value);
       },
-      [],
+      new GokuArray(),
       false
     );
 
@@ -55,28 +67,32 @@ class GokuArray extends Array {
     const missing = current.filter(item => !next.includes(item));
     const common = current.filter(item => next.includes(item));
     return {
-      additional,
-      missing,
+      additional: [...additional], // otherwise will be of type GokuArray
+      missing: [...missing], // same as above
       common: [...new Set(common)]
     };
   };
 
-  missingFrom = (arr = []) => this.filter(i => arr.indexOf(i) === -1);
-
-  unique = identity => {
-    return typeof identity === "function"
-      ? this.filter(function(item) {
-          const id =
-            typeof identity(item) === "undefined"
-              ? Math.random()
-              : identity(item);
-          return this.has(id) ? false : (this.add(id), true);
-        }, new Set())
-      : [...new Set(this)];
+  missingFrom = (arr = []) => {
+    const array = this.filter(i => arr.indexOf(i) === -1)
+    return new GokuArray(array)
   };
 
-  sortItems = ({ ordering = "ASC", field = null } = {}) =>
-    this.sort((a, b) => {
+  unique = identity => {
+    const uniq = typeof identity === "function"
+      ? this.filter(function (item) {
+        const id =
+          typeof identity(item) === "undefined"
+            ? Math.random()
+            : identity(item);
+        return this.has(id) ? false : (this.add(id), true);
+      }, new Set())
+      : [...new Set(this)];
+    return new GokuArray(uniq)
+  };
+
+  sortItems = ({ ordering = "ASC", field = null } = {}) => {
+    const sorted = this.sort((a, b) => {
       if (!field) {
         if (typeof a === "number") {
           if (ordering === "ASC") {
@@ -126,6 +142,8 @@ class GokuArray extends Array {
       }
       return 0; // do nothing;
     });
+    return new GokuArray(sorted)
+  }
 }
 
 export default GokuArray;

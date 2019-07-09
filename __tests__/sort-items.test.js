@@ -10,13 +10,13 @@ test('It should sort the array of numbers ascending', async () => {
   arr.sortItems()
   expect([...arr]).toEqual([1, 2, 3])
   arr = new GokuArray(arrayOfNumbers)
-  arr.sortItems({ ordering: 'ASC'})
+  arr.sortItems({ ordering: 'ASC' })
   expect([...arr]).toEqual([1, 2, 3])
 });
 
 test('It should sort the array of numbers descending', async () => {
   let arr = new GokuArray(arrayOfNumbers)
-  arr.sortItems({ ordering: 'DESC '})
+  arr.sortItems({ ordering: 'DESC' })
   expect([...arr]).toEqual([3, 2, 1])
 });
 
@@ -26,13 +26,13 @@ test('It should sort the array of strings ascending', async () => {
   arr.sortItems()
   expect([...arr]).toEqual(['a', 'b', 'c'])
   arr = new GokuArray(arrayOfStrings)
-  arr.sortItems({ ordering: 'ASC'})
+  arr.sortItems({ ordering: 'ASC' })
   expect([...arr]).toEqual(['a', 'b', 'c'])
 });
 
 test('It should sort the array of strings descending', async () => {
   let arr = new GokuArray(arrayOfStrings)
-  arr.sortItems({ ordering: 'DESC '})
+  arr.sortItems({ ordering: 'DESC' })
   expect([...arr]).toEqual(['c', 'b', 'a'])
 });
 
@@ -49,7 +49,7 @@ test('It should sort the array of objects ascending by field type of number', as
 
 test('It should sort the array of objects descending by field type of number', async () => {
   let arr = new GokuArray(arrayOfObjects)
-  arr.sortItems({ ordering: 'DESC ', field: 'id' })
+  arr.sortItems({ ordering: 'DESC', field: 'id' })
   const expected = [{ id: 3 }, { id: 2 }, { id: 1 }]
   expect([...arr.map(i => ({ id: i.id }))]).toEqual([...expected])
 });
@@ -66,7 +66,7 @@ test('It should sort the array of objects ascending by field type of string', as
 
 test('It should sort the array of objects descending by field type of strings', async () => {
   let arr = new GokuArray(arrayOfObjects)
-  arr.sortItems({ ordering: 'DESC ', field: 'text' })
+  arr.sortItems({ ordering: 'DESC', field: 'text' })
   const expected = [{ text: 'c' }, { text: 'b' }, { text: 'a' }]
   expect([...arr.map(i => ({ text: i.text }))]).toEqual([...expected])
 });
