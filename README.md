@@ -1,3 +1,5 @@
+[![Build Status](https://img.shields.io/travis/ecerroni/goku-array/master.svg?style=flat-square)](https://travis-ci.org/ecerroni/goku-array) [![Coverage Status](https://img.shields.io/codecov/c/github/ecerroni/goku-array/master.svg?style=flat-square)](https://codecov.io/gh/ecerroni/goku-array/branch/master)[![npm version](https://badge.fury.io/js/goku-array.svg)](https://www.npmjs.com/package/goku-array)
+
 # Goku Array
 
 Utility class that extends Array, works with node 10
