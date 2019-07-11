@@ -2,6 +2,17 @@
 
 Utility class that extends Array, works with node 10
 
+## Install
+```
+npm i goku-array
+```
+
+OR
+
+```
+yarn add goku-array
+```
+
 ## Utilities
 
 ### unique()

@@ -1,0 +1,6 @@
+coverage
+dist
+build
+lib
+__tests__
+node_modules
