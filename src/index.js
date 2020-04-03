@@ -150,6 +150,17 @@ class GokuArray extends Array {
     })
     return new GokuArray(sorted)
   }
+
+  groupBy = key =>
+    this.reduce((oBKV, obj) => {
+      if (typeof obj !== 'object' || obj === null || typeof obj === 'undefined')
+        return oBKV
+      const objectsByKeyValue = oBKV
+      const value = obj[key]
+      if (!value) return objectsByKeyValue
+      objectsByKeyValue[value] = (objectsByKeyValue[value] || []).concat(obj)
+      return objectsByKeyValue
+    }, {})
 }
 
 export default GokuArray

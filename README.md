@@ -123,6 +123,70 @@ const simpleArray = [1, 2, 3]
   // [1, 2, 3]
 ```
 
+### groupBy(key)
+
+```
+const arrayOfMixed = [1, 2, { id: 'one', text: 'same' }, 3, 3, 4, 1]
+const arrayOfObjects = [
+  {
+    id: 'one',
+    text: 'sample #1'
+  },
+  {
+    id: 'one',
+    text: 'sample #2'
+  },
+  {
+    id: 'one',
+    text: 'sample #3'
+  },
+  {
+    id: 'two',
+    text: 'sample #4'
+  },
+  {
+    __id: 'two',
+    text: 'sample #4'
+  }
+]
+
+let arr = new GokuArray(arrayOfMixed)
+let newGroupedArray = arr.groupBy('id')
+  // newGroupedArray equals to {
+  //   "one": [
+  //     {
+  //       "id": "one",
+  //       "text": "same",
+  //     },
+  //   ],
+  // })
+
+  arr = new GokuArray(arrayOfObjects)
+  newGroupedArray = arr.groupBy('id')
+  // newGroupedArray equals to {
+  //   "one": [
+  //     {
+  //       "id": "one",
+  //       "text": "same",
+  //       "text": "sample #1",
+  //     }, {
+  //       "id": "one",
+  //       "text": "sample #2",
+  //     },
+  //     {
+  //       "id": "one",
+  //       "text": "sample #3",
+  //     },
+  //   ],
+  //   "two": [
+  //     {
+  //       "id": "two",
+  //       "text": "sample #4",
+  //     },
+  //   ],
+  // }
+```
+
 ### sortItems()
 
 You may sort numbers, strings and objects
